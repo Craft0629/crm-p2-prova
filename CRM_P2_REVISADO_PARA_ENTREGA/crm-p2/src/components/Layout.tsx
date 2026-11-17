@@ -1,0 +1,6 @@
+import {NavLink,Outlet,Navigate,useLocation} from 'react-router-dom';
+import {useAuth} from '../contexts/Auth';
+export function Protegida(){const {usuario,loading}=useAuth();const location=useLocation();if(loading)return <div className="center">Verificando sessão...</div>;return usuario?<Layout/>:<Navigate to="/login" state={{from:location}} replace/>}
+function Layout(){const {usuario,sair}=useAuth();return <div className="shell"><aside className="sidebar"><div className="brand">◆ CRM<span>Clientes</span></div><nav><NavLink end to="/">Painel</NavLink><NavLink to="/clientes">Clientes</NavLink><NavLink to="/pedidos">Pedidos</NavLink><NavLink to="/clientes/novo">+ Novo cliente</NavLink></nav><div className="sidebar-bottom"><small>Conectado como</small><strong>{usuario?.nome||usuario?.firstName||usuario?.username||'Usuário'}</strong><button onClick={sair} className="ghost">Sair da conta</button></div></aside><div className="workspace"><header className="mobile-header"><strong>◆ CRM Clientes</strong><button onClick={sair}>Sair</button></header><main><Outlet/></main><footer>CRM Clientes · Painel de gestão</footer></div></div>}
+export function Mensagem({erro}:{erro:string}){return erro?<div className="error" role="alert">{erro}</div>:null}
+export function Carregando(){return <div className="state">Carregando informações...</div>}
